@@ -2,9 +2,9 @@
 #include <AceButton.h>
 using namespace ace_button;
 
-const byte BUTTON_PLAY_PIN = 4;
-const byte BUTTON_STOP_PIN = 3;
-const byte BUTTON_RECORD_PIN = 2;
+const uint8_t BUTTON_PLAY_PIN = 4;
+const uint8_t BUTTON_STOP_PIN = 3;
+const uint8_t BUTTON_RECORD_PIN = 2;
 
 // Button buttonPlay(BUTTON_PLAY_PIN);
 // Button buttonStop(BUTTON_STOP_PIN);
@@ -15,17 +15,17 @@ AceButton buttonStop(BUTTON_STOP_PIN);
 AceButton buttonRecord(BUTTON_RECORD_PIN);
 
 // MMC Messages for ID 127 / 0x7F (All Devices)
-const byte SYSEX_PLAY[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x02, 0xF7}; // 02 - Play
-const byte SYSEX_STOP[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x01, 0xF7}; // 01 - Stop
-const byte SYSEX_REC[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x06, 0xF7};  // 06 - Record
-const byte MMC_SYSEX_SIZE = 6;
+const uint8_t SYSEX_PLAY[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x02, 0xF7}; // 02 - Play
+const uint8_t SYSEX_STOP[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x01, 0xF7}; // 01 - Stop
+const uint8_t SYSEX_REC[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x06, 0xF7};  // 06 - Record
+const uint8_t MMC_SYSEX_SIZE = 6;
 
 void MidiUSB_sendSysEx(const uint8_t *data, size_t size);
-void handleButtons(AceButton *button, byte eventType, byte buttonState);
-void handlePlayButton(AceButton *button, byte eventType, byte buttonState);
-void handleStopButton(AceButton *button, byte eventType, byte buttonState);
-void handleRecordButton(AceButton *button, byte eventType, byte buttonState);
-void MidiUSB_controlChange(byte channel, byte control, byte value);
+void handleButtons(AceButton *button, uint8_t eventType, uint8_t buttonState);
+void handlePlayButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
+void handleStopButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
+void handleRecordButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
+void MidiUSB_controlChange(uint8_t channel, uint8_t control, uint8_t value);
 
 void setup()
 {
@@ -50,7 +50,7 @@ void loop()
     buttonRecord.check();
 }
 
-void handlePlayButton(AceButton *button, byte eventType, byte buttonState)
+void handlePlayButton(AceButton *button, uint8_t eventType, uint8_t buttonState)
 {
     switch (eventType)
     {
@@ -62,7 +62,7 @@ void handlePlayButton(AceButton *button, byte eventType, byte buttonState)
     }
 }
 
-void handleStopButton(AceButton *button, byte eventType, byte buttonState)
+void handleStopButton(AceButton *button, uint8_t eventType, uint8_t buttonState)
 {
     switch (eventType)
     {
@@ -78,7 +78,7 @@ void handleStopButton(AceButton *button, byte eventType, byte buttonState)
     }
 }
 
-void handleRecordButton(AceButton *button, byte eventType, byte buttonState)
+void handleRecordButton(AceButton *button, uint8_t eventType, uint8_t buttonState)
 {
     switch (eventType)
     {
@@ -94,7 +94,7 @@ void handleRecordButton(AceButton *button, byte eventType, byte buttonState)
     }
 }
 
-void handleButtons(AceButton *button, byte eventType, byte buttonState)
+void handleButtons(AceButton *button, uint8_t eventType, uint8_t buttonState)
 {
 
     switch (button->getPin())
@@ -112,7 +112,7 @@ void handleButtons(AceButton *button, byte eventType, byte buttonState)
     }
 }
 
-void MidiUSB_controlChange(byte channel, byte control, byte value)
+void MidiUSB_controlChange(uint8_t channel, uint8_t control, uint8_t value)
 {
     midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
     MidiUSB.sendMIDI(event);
@@ -127,39 +127,39 @@ void MidiUSB_sendSysEx(const uint8_t *data, size_t size)
     uint8_t midiData[midiDataSize];
     const uint8_t *d = data;
     uint8_t *p = midiData;
-    size_t bytesRemaining = size;
+    size_t uint8_tsRemaining = size;
 
-    while (bytesRemaining > 0)
+    while (uint8_tsRemaining > 0)
     {
-        switch (bytesRemaining)
+        switch (uint8_tsRemaining)
         {
         case 1:
-            *p++ = 5; // SysEx ends with following single byte
+            *p++ = 5; // SysEx ends with following single uint8_t
             *p++ = *d;
             *p++ = 0;
             *p = 0;
-            bytesRemaining = 0;
+            uint8_tsRemaining = 0;
             break;
         case 2:
-            *p++ = 6; // SysEx ends with following two bytes
+            *p++ = 6; // SysEx ends with following two uint8_ts
             *p++ = *d++;
             *p++ = *d;
             *p = 0;
-            bytesRemaining = 0;
+            uint8_tsRemaining = 0;
             break;
         case 3:
-            *p++ = 7; // SysEx ends with following three bytes
+            *p++ = 7; // SysEx ends with following three uint8_ts
             *p++ = *d++;
             *p++ = *d++;
             *p = *d;
-            bytesRemaining = 0;
+            uint8_tsRemaining = 0;
             break;
         default:
             *p++ = 4; // SysEx starts or continues
             *p++ = *d++;
             *p++ = *d++;
             *p++ = *d++;
-            bytesRemaining -= 3;
+            uint8_tsRemaining -= 3;
             break;
         }
     }
