@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <MIDIUSB.h>
 #include <AceButton.h>
 using namespace ace_button;
