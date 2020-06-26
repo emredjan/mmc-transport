@@ -20,12 +20,12 @@ const uint8_t SYSEX_STOP[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x01, 0xF7}; // 01 - Stop
 const uint8_t SYSEX_REC[6] = {0xF0, 0x7F, 0x7F, 0x06, 0x06, 0xF7};  // 06 - Record
 const uint8_t MMC_SYSEX_SIZE = 6;
 
-void MidiUSB_sendSysEx(const uint8_t *data, size_t size);
 void handleButtons(AceButton *button, uint8_t eventType, uint8_t buttonState);
 void handlePlayButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
 void handleStopButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
 void handleRecordButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
 void MidiUSB_controlChange(uint8_t channel, uint8_t control, uint8_t value);
+void MidiUSB_sendSysEx(const uint8_t *data, size_t size);
 
 void setup()
 {
@@ -105,7 +105,6 @@ void handleButtons(AceButton *button, uint8_t eventType, uint8_t buttonState)
     case BUTTON_STOP_PIN:
         handleStopButton(button, eventType, buttonState);
         break;
-
     case BUTTON_RECORD_PIN:
         handleRecordButton(button, eventType, buttonState);
         break;
