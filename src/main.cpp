@@ -40,6 +40,8 @@ void setup()
     buttonConfig->setFeature(ButtonConfig::kFeatureSuppressClickBeforeDoubleClick);
     buttonConfig->setFeature(ButtonConfig::kFeatureSuppressAfterClick);
     buttonConfig->setFeature(ButtonConfig::kFeatureSuppressAfterDoubleClick);
+    buttonConfig->setClickDelay(120);
+    buttonConfig->setDoubleClickDelay(300);
 
     Serial.begin(115200);
 }
@@ -57,7 +59,8 @@ void handlePlayButton(AceButton *button, uint8_t eventType, uint8_t buttonState)
     {
     case AceButton::kEventClicked:
     case AceButton::kEventReleased:
-        MidiUSB_sendSysEx(SYSEX_PLAY, MMC_SYSEX_SIZE);
+        // MidiUSB_sendSysEx(SYSEX_PLAY, MMC_SYSEX_SIZE);
+        MidiUSB_controlChange(1, 14, 127);
         MidiUSB.flush();
         break;
     }
@@ -69,7 +72,8 @@ void handleStopButton(AceButton *button, uint8_t eventType, uint8_t buttonState)
     {
     case AceButton::kEventClicked:
     case AceButton::kEventReleased:
-        MidiUSB_sendSysEx(SYSEX_STOP, MMC_SYSEX_SIZE);
+        // MidiUSB_sendSysEx(SYSEX_STOP, MMC_SYSEX_SIZE);
+        MidiUSB_controlChange(1, 15, 127);
         MidiUSB.flush();
         break;
     case AceButton::kEventDoubleClicked:
@@ -85,7 +89,8 @@ void handleRecordButton(AceButton *button, uint8_t eventType, uint8_t buttonStat
     {
     case AceButton::kEventClicked:
     case AceButton::kEventReleased:
-        MidiUSB_sendSysEx(SYSEX_REC, MMC_SYSEX_SIZE);
+        // MidiUSB_sendSysEx(SYSEX_REC, MMC_SYSEX_SIZE);
+        MidiUSB_controlChange(1, 16, 127);
         MidiUSB.flush();
         break;
     case AceButton::kEventDoubleClicked:
